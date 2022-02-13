@@ -1,0 +1,82 @@
+﻿<Window x:Class="WpfLab9.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfLab9"
+        mc:Ignorable="d"
+        Title="Текстовый редактор" Height="600" MinHeight="300" Width="600" MinWidth="500" Closing="Window_Closing" Style="{DynamicResource WindowStyle}">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:MyCommands.Exit" Executed="ExitExecuted"/>
+        <CommandBinding Command="Open" Executed="OpenExecuted"/>
+        <CommandBinding Command="Save" Executed="SaveExecuted" CanExecute="SaveCanExecute"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="87*"/>
+            <ColumnDefinition Width="113*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.ColumnSpan="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Menu Grid.Row="0" Height="Auto" Padding="0">
+                <MenuItem Header="Файл" Height="20" Margin="2" VerticalAlignment="Stretch" VerticalContentAlignment="Center">
+                    <MenuItem Header="Открыть" Command="ApplicationCommands.Open"></MenuItem>
+                    <MenuItem Header="Сохранить" Command="ApplicationCommands.Save"></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Закрыть" Command="local:MyCommands.Exit"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Правка" Height="20" Margin="2" VerticalAlignment="Stretch" VerticalContentAlignment="Center">
+                    <MenuItem Header="Копировать" Command="Copy" CommandTarget="{Binding ElementName=textBox}"/>
+                    <!--можно было не указывать, но для общего случая, или когда несколько текстбоксов, и мы хотим ограничить. По умолчанию привязка к элементу, на котором фокус-->
+                    <MenuItem Header="Вставить" Command="Paste" CommandTarget="{Binding ElementName=textBox}"/>
+                    <!--можно было не указывать, но для общего случая, или когда несколько текстбоксов, и мы хотим ограничить. По умолчанию привязка к элементу, на котором фокус-->
+
+                </MenuItem>
+                <MenuItem Header="Справка" Height="20" Margin="2" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Command="ApplicationCommands.Help">
+                    <MenuItem.CommandBindings>
+                        <CommandBinding Command="Help" Executed="HelpExecuted"/>
+                    </MenuItem.CommandBindings>
+                </MenuItem>
+            </Menu>
+
+            <ToolBarTray Grid.Row="1">
+                <ToolBar >
+                    <ComboBox ItemContainerStyle="{DynamicResource MyComboBoxItemContainerStyle}" ItemsSource="{StaticResource fonts}" Width="120" Margin ="5" VerticalAlignment="Center" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged"/>
+                    <ComboBox ItemsSource="{StaticResource sizes}" Width="40" Margin ="5" VerticalAlignment="Center" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged_1" OverridesDefaultStyle="True"/>
+                </ToolBar>
+                <ToolBar>
+                    <StackPanel Orientation="Horizontal" Margin ="5">
+                        <ToggleButton Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked">
+                            <Image Source="Data\Bold.png" Width="30" Height="30"></Image>
+                        </ToggleButton>
+                        <ToggleButton Checked="ToggleButton_Checked_1" Unchecked="ToggleButton_Unchecked_1">
+                            <Image Source="Data\Italic.png" Width="30" Height="30"></Image>
+                        </ToggleButton>
+                        <ToggleButton Checked="ToggleButton_Checked_2" Unchecked="ToggleButton_Unchecked_2">
+                            <Image  Source="Data\UnderLined.png" Width="30" Height="30"></Image>
+                        </ToggleButton>
+                    </StackPanel>
+                </ToolBar>
+                <ToolBar>
+                    <StackPanel Orientation="Vertical" Margin ="5" VerticalAlignment="Center">
+                        <RadioButton Content="Черный" IsChecked="True" Checked="RadioButton_Checked"/>
+                        <RadioButton Content="Красный" Checked="RadioButton_Checked_1"/>
+                    </StackPanel>
+                </ToolBar>
+                <ToolBar>
+                    <ComboBox x:Name="styleBox"/>
+                </ToolBar>
+            </ToolBarTray>
+            <TextBox Grid.Row="2" x:Name="textBox" TextWrapping="Wrap" FontFamily="Arial" FontSize="16" FontStyle="Normal" TextDecorations="None" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" Padding="5,5,5,5" ScrollViewer.CanContentScroll="True" Margin="0" />
+        </Grid>
+    </Grid>
+</Window>
